@@ -2,11 +2,9 @@
 
 ## Objetivos del proyecto
 
-- Construir una consola virtual retro, responsiva y usable con ratón, teclado, táctil y pantalla completa.
-- Integrar Michikembo, Cosmic Drift y Dino Corredor en una experiencia unificada.
+- Construir una consola virtual retro, responsive y usable con ratón, teclado, táctil y pantalla completa.
 - Hacer jugable Michikembo con la mano frente a la cámara: piedra, papel o tijera contra Michi.
 - Mantener el modelo de IA reemplazable mediante `manifest.json`, sin reescribir las reglas del juego.
-- Ejecutar inferencia en el navegador con ONNX Runtime Web y liberar cámara, audio y bucles al salir.
 - Mantener el entrenamiento reproducible y separado del producto web mediante notebooks, manifiestos y bitácoras.
 
 ## Qué contiene
@@ -49,7 +47,7 @@ games/michikembo/
 
 La consola monta un solo juego a la vez, detiene la preview antes de jugar, suspende su audio y ejecuta una limpieza final de las pistas de cámara aunque el juego no las haya liberado correctamente.
 
-## Modelo de visión artificial: punto fuerte
+## Modelo de visión artificial
 
 ### Flujo completo
 
@@ -93,8 +91,6 @@ La versión v2.1 se reconstruyó para reducir fugas entre entrenamiento y evalua
 - Validación y test repartidos por familias/fuentes, no solo aleatoriamente.
 - Imágenes con gestos mezclados excluidas de ciertas métricas de decisión del juego.
 
-El notebook más reciente contiene la tubería v2.2 y experimentos E4a/E4b, pero el manifiesto identifica a **E3c-v2.1** como modelo activo. No se deben presentar E4a/E4b como resultado final sin sus artefactos y métricas.
-
 ### Hiperparámetros de E3c
 
 | Parámetro | Valor |
@@ -125,7 +121,7 @@ La hipótesis de E3c fue que una aumentación fuerte mejoraría la generalizaci�
 | **E3c** | **YOLOv8n + aumentación fuerte** | **0,812** | **0,510** | **0,629** | **0,364** |
 | E3d | YOLOv8n + entrada 800 px | 0,834 | 0,437 | 0,545 | 0,340 |
 
-E3c se seleccionó usando validación: primero se evita un sobreajuste marcado, luego se prioriza mAP@50; los empates dentro de un punto usan mAP@50-95 y finalmente latencia CPU. El test interno no se usó para escogerlo.
+E3c se seleccionó usando validación: primero se evita un sobreajuste marcado, luego se prioriza mAP@50; los empates dentro de un punto usan mAP@50-95 y finalmente latencia CPU. 
 
 ### Métricas, equivalencia y limitaciones
 
@@ -183,8 +179,6 @@ Consola web con tres juegos:
 3. **Dino Corredor**: corredor infinito original (arte y sonido hechos con código).
 
 Incluye también el notebook de entrenamiento del detector YOLOv8 (`notebooks/`) y su documentación (`docs/`).
-
-> **Estado:** Michikembo funciona con el modelo **E3c (YOLOv8n) en ONNX**, que es **provisional y experimental** (no alcanza el 90 %). También puede jugarse con un detector simulado. El modelo se cambia reemplazando dos archivos: [`docs/COMO_CAMBIAR_MODELO.md`](docs/COMO_CAMBIAR_MODELO.md). Avance por fases: [`docs/ESTADO_ACTUAL.md`](docs/ESTADO_ACTUAL.md).
 
 ## Probarlo en tu computador (Windows, VS Code)
 
