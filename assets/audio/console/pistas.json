@@ -1,0 +1,11 @@
+{
+  "_ayuda": "null = usar la música/efecto ORIGINAL sintetizado. Para usar tu archivo pon su nombre, p. ej. \"bienvenida\": \"startup.ogg\". Guía: docs/AUDIO.md",
+  "bienvenida": null,
+  "navegar": null,
+  "seleccionar": null,
+  "abrir_juego": null,
+  "volver": null,
+  "encender": null,
+  "maullido": null,
+  "apagar": null
+}

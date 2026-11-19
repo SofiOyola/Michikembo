@@ -1,0 +1,365 @@
+/* ============================================================
+   MICHIKEMBO — Estilos
+   Paleta pastel inspirada en la imagen de referencia de la consola:
+   fondo azul lavanda, carcasa blanca con borde morado, pantallas
+   violetas y botones rosa/rojo. Tipografía pixel (Press Start 2P, OFL).
+   ============================================================ */
+@font-face {
+    font-family: "Press Start 2P";
+    src: url("../../../assets/fonts/PressStart2P.woff2") format("woff2");
+    font-display: swap;
+}
+
+:root {
+    --fondo: #b8c8ec;          /* azul pastel */
+    --fondo-2: #cfc6f2;        /* lavanda */
+    --carcasa: #fbf9ff;        /* blanco cálido */
+    --borde: #4b2a86;          /* morado intenso del contorno */
+    --pantalla: #6a3fae;       /* violeta de la pantalla */
+    --pantalla-osc: #351a64;
+    --texto: #2c1655;
+    --texto-claro: #f4eeff;
+    --tenue: #7c68a8;
+    --rosa: #ef4b78;           /* botones A/B */
+    --rosa-claro: #ff9dbb;
+    --menta: #4fd6a6;
+    --oro: #ffc94a;
+    --rojo: #e3324a;
+    --cielo: #7fd3ff;
+    --sombra: 0 5px 0 var(--borde);
+    --radio: 16px;
+    --pixel: "Press Start 2P", ui-monospace, "Courier New", monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+    background:
+        radial-gradient(circle at 15% 10%, #d6dcfa 0, transparent 40%),
+        radial-gradient(circle at 90% 95%, var(--fondo-2) 0, transparent 45%),
+        var(--fondo);
+    color: var(--texto);
+    font-family: var(--pixel);
+    font-size: 12px;
+    line-height: 1.7;
+    overflow: hidden;
+    user-select: none;
+    -webkit-font-smoothing: none;
+}
+button, select, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px dashed var(--rosa); outline-offset: 3px; }
+[hidden] { display: none !important; }
+
+#juego {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(8px, 1.6vw, 18px);
+    gap: clamp(8px, 1.4vw, 14px);
+}
+
+/* ---------- Botones ---------- */
+.boton {
+    background: var(--carcasa);
+    border: 4px solid var(--borde);
+    border-radius: 12px;
+    box-shadow: var(--sombra);
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--texto);
+    transition: transform 0.06s, box-shadow 0.06s, background 0.15s;
+}
+.boton:hover { background: #fff0f6; }
+.boton:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--borde); }
+.boton.principal { background: var(--rosa); color: #fff; text-shadow: 2px 2px 0 #9b1e45; }
+.boton.principal:hover { background: #ff5f8a; }
+.boton:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: var(--sombra); }
+.boton.chico { padding: 8px 12px; font-size: 10px; }
+
+.icono {
+    min-width: 42px; height: 42px; padding: 0 8px;
+    background: var(--carcasa);
+    border: 3px solid var(--borde);
+    border-radius: 50%;
+    box-shadow: 0 3px 0 var(--borde);
+    font-size: 11px;
+    color: var(--borde);
+}
+.icono:active { transform: translateY(3px); box-shadow: none; }
+.icono.apagado { color: var(--rojo); }
+#btnDiag { border-radius: 12px; font-size: 9px; }
+body.dev #btnDiag { background: var(--borde); color: var(--carcasa); }
+
+/* ---------- Barra superior ---------- */
+.barra {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+}
+.logo {
+    font-size: clamp(12px, 1.7vw, 20px);
+    color: var(--borde);
+    text-shadow: 2px 2px 0 var(--carcasa);
+    letter-spacing: 0.05em;
+}
+.logo span { color: var(--rosa); }
+.chip-meta {
+    background: var(--pantalla-osc);
+    color: var(--oro);
+    border: 3px solid var(--borde);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: clamp(8px, 1vw, 11px);
+    white-space: nowrap;
+}
+.acciones { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ---------- Arena ---------- */
+.arena {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(170px, 0.62fr) minmax(0, 1fr);
+    gap: clamp(8px, 1.4vw, 18px);
+}
+.columna { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+
+/* Marcador ENCIMA de cada casilla */
+.tablero {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: 12px;
+    background: var(--carcasa);
+    border: 4px solid var(--borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    padding: 10px 14px;
+}
+.tablero .quien { grid-row: 1 / 3; font-size: clamp(11px, 1.4vw, 16px); }
+.tablero-michi .quien { color: var(--pantalla); }
+.tablero-jugador .quien { color: var(--rosa); }
+.tablero .victorias { font-size: clamp(9px, 1.1vw, 13px); }
+.tablero .victorias b { font-size: 1.5em; color: var(--borde); }
+.tablero .pips { display: flex; gap: 4px; flex-wrap: wrap; }
+.pips i { width: 12px; height: 12px; border: 2px solid var(--borde); background: transparent; }
+.tablero-michi .pips i.on { background: var(--pantalla); }
+.tablero-jugador .pips i.on { background: var(--rosa); }
+.tablero.salto { animation: salto 0.5s ease; }
+@keyframes salto { 40% { transform: scale(1.06) translateY(-4px); } }
+
+/* Casillas: pantalla violeta con borde morado y cristal */
+.caja {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    border: 4px solid var(--borde);
+    border-radius: var(--radio);
+    background: linear-gradient(135deg, var(--pantalla) 0%, var(--pantalla-osc) 100%);
+    box-shadow: var(--sombra), inset 0 0 0 6px rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+.caja::after { /* reflejo del cristal */
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(115deg, transparent 55%, rgba(255, 255, 255, 0.10) 56%, rgba(255, 255, 255, 0.10) 62%, transparent 63%);
+}
+
+/* --- Cámara del jugador --- */
+.caja-camara video, .caja-camara canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+body.espejo .caja-camara video, body.espejo .caja-camara canvas { transform: scaleX(-1); }
+.caja-camara video { opacity: 0; transition: opacity 0.3s; }
+body.camara-on .caja-camara video { opacity: 1; }
+.sin-camara {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    color: var(--texto-claro); text-align: center; padding: 16px; font-size: 10px;
+}
+.mano-simulada { font-size: clamp(40px, 6vw, 80px); line-height: 1; transition: transform 0.15s; }
+.mano-simulada.cambio { transform: scale(1.2) rotate(-6deg); }
+body.camara-on .sin-camara p { display: none; }
+body.camara-on .mano-simulada { font-size: 40px; position: absolute; right: 10px; bottom: 6px; }
+body:not(.modo-manual) .mano-simulada { display: none; }
+.etiqueta-detector {
+    position: absolute; left: 8px; top: 8px;
+    background: rgba(53, 26, 100, 0.8); color: var(--texto-claro);
+    border-radius: 8px; padding: 4px 8px; font-size: 8px;
+}
+body:not(.dev) .etiqueta-detector { display: none; }
+body.fijada .caja-camara { border-color: var(--menta); box-shadow: 0 5px 0 var(--borde), 0 0 0 4px var(--menta); }
+
+.lectura {
+    background: var(--carcasa); border: 4px solid var(--borde); border-radius: 12px; padding: 8px 12px;
+}
+.lectura-fila { display: flex; gap: 10px; align-items: center; font-size: 10px; }
+.lectura-fila strong { color: var(--pantalla); }
+.barra-estable { height: 10px; margin-top: 6px; border: 2px solid var(--borde); background: #ece6fb; }
+.barra-estable div { height: 100%; width: 0; background: var(--menta); transition: width 0.1s linear; }
+
+.controles-simulados { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.controles-simulados button {
+    background: var(--carcasa); border: 3px solid var(--borde); border-radius: 10px; padding: 8px 4px;
+    font-size: 12px; box-shadow: 0 3px 0 var(--borde);
+}
+.controles-simulados button b { font-size: 8px; color: var(--tenue); display: block; }
+.controles-simulados button.activo { background: var(--rosa-claro); }
+body:not(.modo-manual) .controles-simulados { display: none; }
+
+/* --- Michi --- */
+.caja-michi { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.bocadillo {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    background: var(--carcasa); color: var(--texto); border: 3px solid var(--borde); border-radius: 12px;
+    padding: 6px 10px; font-size: clamp(8px, 0.9vw, 10px); white-space: nowrap; z-index: 2;
+}
+.michi { position: relative; width: min(78%, 360px); aspect-ratio: 1; display: grid; place-items: center; margin-top: 24px; }
+.michi-sprite, .michi-gif {
+    display: none; width: 100%; height: 100%; object-fit: contain;
+    image-rendering: pixelated; image-rendering: crisp-edges; /* nearest-neighbor */
+}
+.michi.con-sprite .michi-sprite { display: block; }
+.michi.con-gif .michi-gif { display: block; }
+.michi.con-sprite .michi-provisional, .michi.con-gif .michi-provisional { display: none; }
+.michi-provisional { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--texto-claro); }
+.michi-provisional .cara { font-size: clamp(64px, 9vw, 120px); line-height: 1; }
+.michi-provisional .gesto { font-size: 40px; min-height: 40px; }
+.michi-provisional .rotulo { font-size: 8px; opacity: 0.8; }
+.michi.cambio .michi-provisional, .michi.cambio .michi-sprite, .michi.cambio .michi-gif { animation: rebote 0.4s ease; }
+@keyframes rebote { 40% { transform: scale(1.06) translateY(-6px); } }
+
+/* ---------- Centro: cuenta, duelo, resultado ---------- */
+.centro {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center;
+    background: var(--carcasa); border: 4px solid var(--borde); border-radius: var(--radio); box-shadow: var(--sombra);
+    padding: 14px 10px; min-width: 0;
+}
+.cuenta { font-size: clamp(48px, 7vw, 96px); color: var(--rosa); text-shadow: 4px 4px 0 var(--borde); min-height: 1.1em; line-height: 1.1; }
+.cuenta.pulso { animation: pulso 0.9s ease-out; }
+@keyframes pulso { 0% { transform: scale(1.8); opacity: 0; } 25% { transform: scale(1); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.85; } }
+.aviso { font-size: clamp(10px, 1.25vw, 15px); color: var(--borde); min-height: 1.6em; }
+.subaviso { font-size: 9px; color: var(--tenue); min-height: 3.2em; max-width: 26ch; }
+.duelo { display: flex; align-items: center; gap: 10px; }
+.carta {
+    width: clamp(56px, 6.5vw, 86px); aspect-ratio: 3 / 4; display: grid; place-items: center;
+    font-size: clamp(26px, 3.2vw, 42px);
+    background: var(--pantalla-osc); color: var(--texto-claro);
+    border: 4px solid var(--borde); border-radius: 12px; box-shadow: var(--sombra);
+}
+.carta.voltear { animation: voltear 0.45s ease; background: var(--carcasa); }
+@keyframes voltear { 0% { transform: rotateY(90deg); } 100% { transform: rotateY(0); } }
+.carta.ganadora { border-color: var(--oro); animation: brillo 0.8s ease infinite alternate; }
+@keyframes brillo { to { transform: translateY(-6px) scale(1.06); box-shadow: 0 0 0 4px var(--oro), var(--sombra); } }
+.carta.perdedora { opacity: 0.45; filter: grayscale(0.7); }
+.vs { color: var(--tenue); font-size: 10px; }
+.reloj { width: 80%; height: 10px; border: 2px solid var(--borde); background: #ece6fb; visibility: hidden; }
+.reloj div { height: 100%; background: var(--rosa); transform-origin: left; }
+body[data-estado="COUNTDOWN_1_REVEAL_CAT"] .reloj, body[data-estado="CAPTURE_PLAYER_GESTURE"] .reloj { visibility: visible; }
+#btnContinuar { visibility: hidden; }
+body[data-estado^="ROUND_WIN"] #btnContinuar, body[data-estado="ROUND_TIE"] #btnContinuar,
+body[data-estado="ROUND_INVALID_GESTURE"] #btnContinuar, body[data-estado="WAIT_NEXT_ROUND"] #btnContinuar { visibility: visible; }
+body[data-estado="ROUND_WIN_PLAYER"] .aviso { color: var(--menta); text-shadow: 1px 1px 0 var(--borde); }
+body[data-estado="ROUND_WIN_CAT"] .aviso { color: var(--rojo); }
+body[data-estado="ROUND_INVALID_GESTURE"] .aviso { color: #c77a00; }
+
+.pie { text-align: center; font-size: 10px; color: var(--borde); }
+
+/* ---------- Modo desarrollo ---------- */
+.diagnostico {
+    display: none;
+    position: absolute; right: clamp(8px, 1.6vw, 18px); bottom: 34px; z-index: 5;
+    width: min(360px, 92vw);
+    background: rgba(28, 12, 56, 0.92); color: #d9ffe9;
+    border: 3px solid var(--menta); border-radius: 12px; padding: 10px 12px; font-size: 8px; line-height: 1.6;
+}
+body.dev .diagnostico { display: block; }
+.diagnostico h3 { margin: 0 0 6px; font-size: 9px; color: var(--menta); font-weight: normal; }
+.diagnostico dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 0; }
+.diagnostico dt { color: #9e8ccc; }
+.diagnostico dd { margin: 0; word-break: break-word; }
+
+/* ---------- Pantallas superpuestas ---------- */
+.pantalla {
+    position: absolute; inset: 0; z-index: 10;
+    display: none; align-items: center; justify-content: center; padding: 16px;
+    background: rgba(140, 158, 214, 0.55); backdrop-filter: blur(3px);
+}
+.pantalla.visible { display: flex; animation: aparecer 0.2s ease; }
+@keyframes aparecer { from { opacity: 0; } }
+.tarjeta {
+    width: min(560px, 100%); max-height: 100%; overflow: auto;
+    background: var(--carcasa); border: 5px solid var(--borde); border-radius: 22px;
+    box-shadow: 0 8px 0 var(--borde); padding: clamp(18px, 3vw, 30px); text-align: center;
+}
+.tarjeta h1 { margin: 0 0 12px; font-size: clamp(22px, 4vw, 38px); color: var(--borde); text-shadow: 3px 3px 0 var(--rosa-claro); font-weight: normal; }
+.tarjeta h1 span { color: var(--rosa); }
+.tarjeta h2 { margin: 0 0 14px; font-size: clamp(14px, 2.2vw, 20px); color: var(--borde); font-weight: normal; }
+.tarjeta h2.grande { font-size: clamp(18px, 3.4vw, 30px); text-shadow: 3px 3px 0 var(--rosa-claro); margin-bottom: 22px; }
+.lema { font-size: 10px; color: var(--tenue); }
+.ayuda { font-size: 8px; color: var(--tenue); }
+.botones { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.botones.fila { flex-direction: row; justify-content: center; }
+.botones.fila .boton { min-width: 120px; font-size: 16px; }
+
+.metas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.boton.meta { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 4px; }
+.boton.meta b { font-size: 26px; color: var(--rosa); font-weight: normal; }
+.boton.meta small { font-size: 7px; color: var(--tenue); }
+
+.explicacion p { font-size: 10px; }
+.pasos-camara { list-style: none; padding: 0; margin: 10px 0; font-size: 9px; text-align: left; display: inline-block; }
+.pasos-camara li::before { content: "○ "; }
+.pasos-camara li.ok { color: #23946d; }
+.pasos-camara li.ok::before { content: "✓ "; }
+.pasos-camara li.mal { color: var(--rojo); }
+.consejo { font-size: 9px; background: #f1ebff; border: 3px dashed var(--pantalla); border-radius: 10px; padding: 10px; }
+.mensaje-error { font-size: 10px; color: var(--rojo); }
+
+.opcion { display: flex; flex-direction: column; gap: 6px; text-align: left; margin: 10px 0; font-size: 9px; }
+.opcion.check { flex-direction: row; align-items: center; }
+.opcion select { padding: 8px; border: 3px solid var(--borde); border-radius: 8px; background: #fff; font-size: 9px; }
+.opcion input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--rosa); }
+.opcion.volumen { flex-direction: row; align-items: center; justify-content: space-between; gap: 10px; margin: 6px 0; }
+.opcion.volumen input[type="range"] { flex: 1; max-width: 55%; accent-color: var(--rosa); }
+
+/* Final: YOU WIN / YOU LOSE grande y pixelado */
+.titulo-fin { font-size: clamp(32px, 7vw, 64px) !important; margin-bottom: 8px !important; }
+.titulo-fin.gana { color: var(--oro) !important; text-shadow: 4px 4px 0 var(--borde), -2px -2px 0 var(--menta); animation: latido 0.9s ease-in-out infinite; }
+.titulo-fin.pierde { color: var(--rojo) !important; text-shadow: 4px 4px 0 var(--borde); }
+@keyframes latido { 50% { transform: scale(1.06); } }
+.fin-michi { width: 110px; height: 110px; object-fit: contain; image-rendering: pixelated; }
+.final { font-size: clamp(12px, 2vw, 18px); color: var(--borde); margin: 6px 0; }
+.historial { text-align: left; font-size: 8px; color: var(--tenue); max-height: 110px; overflow: auto; padding-left: 22px; }
+
+.cargando { position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; background: var(--fondo); color: var(--borde); font-size: 14px; }
+.cargando.oculto { display: none; }
+.confeti { position: absolute; top: -20px; width: 10px; height: 14px; z-index: 11; pointer-events: none; animation: caer linear forwards; }
+@keyframes caer { to { transform: translateY(110vh) rotate(720deg); } }
+
+/* Vista previa dentro de la consola: sin controles ni pantallas */
+body.preview .acciones, body.preview .controles-simulados, body.preview .pantalla, body.preview #btnContinuar { display: none !important; }
+
+/* ---------- Pantallas estrechas (móvil vertical) ---------- */
+@media (max-width: 760px) {
+    body { overflow: auto; }
+    #juego { height: auto; min-height: 100%; }
+    .barra { grid-template-columns: 1fr auto; }
+    .chip-meta { display: none; }
+    .arena { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; }
+    .centro { grid-column: 1 / 3; grid-row: 2; }
+    .col-michi { grid-column: 1; grid-row: 1; }
+    .col-jugador { grid-column: 2; grid-row: 1; }
+    .caja { min-height: 170px; }
+    .tablero { grid-template-columns: 1fr; padding: 6px 8px; }
+    .tablero .quien { grid-row: auto; }
+    .michi-provisional .rotulo, .bocadillo { display: none; }
+    .metas { grid-template-columns: repeat(2, 1fr); }
+    .diagnostico { position: static; width: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition: none !important; }
+}

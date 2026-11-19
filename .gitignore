@@ -1,0 +1,36 @@
+# Entornos y cachés
+venv/
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Secretos
+.env
+*.env
+credentials*.json
+
+# Datos y pesos pesados (no se suben)
+*.zip
+*.pt
+*.onnx
+datasets/
+runs/
+
+# Modelo web: se versiona SOLO manifest.json. model.onnx (12,8 MB) queda fuera
+# hasta decidir su publicación (licencias, Fase 11). Ver docs/COMO_CAMBIAR_MODELO.md
+assets/models/michikembo/anteriores/
+# Fixtures de equivalencia: se generan con scripts/preparar_modelo.py a partir
+# de imágenes del dataset, que no se redistribuyen
+tests/fixtures/modelo/
+tests/fixtures/_export/
+
+# Cosmic Drift se descarga desde su repositorio con scripts/traer_cosmic_drift.*
+# (su música pesa 54 MB y el repo original no tiene licencia). Solo se versionan
+# adapter.js y README.md de games/cosmic_drift/.
+games/cosmic_drift/fuente/
+
+# Duplicado temporal de la consola B (se elimina tras la unificación)
+game/

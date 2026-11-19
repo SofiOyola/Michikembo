@@ -1,0 +1,14 @@
+{
+  "_ayuda": "null = usar la música/efecto ORIGINAL sintetizado. Para usar tu archivo pon su nombre, p. ej. \"menu_theme\": \"menu_theme.ogg\" o { \"archivo\": \"menu_theme.mp3\", \"volumen\": 0.7 }. Guía: docs/AUDIO.md",
+  "menu_theme": null,
+  "final_win": null,
+  "final_lose": null,
+  "boton": null,
+  "cuenta_3": null,
+  "cuenta_2": null,
+  "reveal": null,
+  "round_win": null,
+  "round_lose": null,
+  "round_tie": null,
+  "no_gesture": null
+}

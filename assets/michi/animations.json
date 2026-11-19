@@ -1,0 +1,12 @@
+{
+  "frameAncho": 32,
+  "frameAlto": 32,
+  "estados": {
+    "idle": { "archivo": "sprites/idle.gif", "tipo": "gif" },
+    "piedra": { "archivo": "sprites/piedra.gif", "tipo": "gif" },
+    "papel": { "archivo": "sprites/papel.gif", "tipo": "gif" },
+    "tijera": { "archivo": "sprites/tijera.gif", "tipo": "gif" },
+    "feliz": { "archivo": "sprites/happy.gif", "tipo": "gif" },
+    "triste": { "archivo": "sprites/sad.gif", "tipo": "gif" }
+  }
+}

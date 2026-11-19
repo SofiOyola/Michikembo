@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Michikembo</title>
+    <link rel="stylesheet" href="css/michikembo.css" />
+</head>
+<body data-estado="GAME_MENU">
+<div id="juego">
+    <!-- ===== Barra superior ===== -->
+    <header class="barra">
+        <div class="logo" aria-hidden="true">MICHI<span>KEMBO</span></div>
+        <div class="chip-meta" id="chipMeta">PRIMERO EN GANAR 3</div>
+        <div class="acciones">
+            <button class="icono" id="btnSonido" type="button" title="Sonido (M)" aria-label="Activar o silenciar sonido">♪</button>
+            <button class="icono" id="btnPausa" type="button" title="Pausa (P)" aria-label="Pausar">II</button>
+            <button class="icono" id="btnDiag" type="button" title="Modo desarrollo (D)" aria-label="Mostrar u ocultar el modo desarrollo">DEV</button>
+            <button class="icono" id="btnSalirArriba" type="button" title="Salir a la consola" aria-label="Salir a la consola">✕</button>
+        </div>
+    </header>
+
+    <!-- ===== Arena: MICHI (izquierda) | centro | JUGADOR (derecha) ===== -->
+    <main class="arena">
+        <section class="columna col-michi" aria-label="Michi">
+            <div class="tablero tablero-michi" aria-live="polite">
+                <span class="quien">MICHI</span>
+                <span class="victorias">VICTORIAS: <b id="puntosMichi">0</b></span>
+                <span class="pips" id="pipsMichi"></span>
+            </div>
+            <div class="caja caja-michi">
+                <div class="bocadillo" id="bocadillo">Miau… ¿jugamos?</div>
+                <div class="michi" id="michi">
+                    <img class="michi-gif" alt="Animación de Michi" />
+                    <canvas class="michi-sprite" width="32" height="32"></canvas>
+                    <div class="michi-provisional">
+                        <span class="cara">🐱</span>
+                        <span class="gesto"></span>
+                        <span class="rotulo">animación pendiente: idle</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="centro" aria-live="assertive">
+            <div class="cuenta" id="cuenta"></div>
+            <div class="aviso" id="aviso"></div>
+            <div class="duelo" id="duelo">
+                <span class="carta" id="cartaMichi" aria-label="Jugada de Michi">?</span>
+                <span class="vs">VS</span>
+                <span class="carta" id="cartaJugador" aria-label="Tu jugada">?</span>
+            </div>
+            <div class="reloj" id="reloj" title="Ventana de captura"><div></div></div>
+            <div class="subaviso" id="subaviso"></div>
+            <button type="button" class="boton chico" id="btnContinuar">CONTINUAR ▶</button>
+        </section>
+
+        <section class="columna col-jugador" aria-label="Jugador">
+            <div class="tablero tablero-jugador" aria-live="polite">
+                <span class="quien">JUGADOR</span>
+                <span class="victorias">VICTORIAS: <b id="puntosJugador">0</b></span>
+                <span class="pips" id="pipsJugador"></span>
+            </div>
+            <div class="caja caja-camara">
+                <video id="video" playsinline muted></video>
+                <canvas id="capa" width="640" height="480"></canvas>
+                <div class="sin-camara" id="sinCamara">
+                    <div class="mano-simulada" id="manoSimulada">?</div>
+                    <p id="textoSinCamara">Cámara apagada</p>
+                </div>
+                <div class="etiqueta-detector" id="etiquetaDetector">detector</div>
+            </div>
+            <div class="lectura">
+                <div class="lectura-fila"><span>VEO:</span> <strong id="lecturaJugada">—</strong></div>
+                <div class="barra-estable" title="Estabilidad del gesto"><div id="barraEstable"></div></div>
+            </div>
+            <div class="controles-simulados" id="controlesSimulados" role="group" aria-label="Mano simulada">
+                <button type="button" data-mano="piedra"><b>1</b> ✊</button>
+                <button type="button" data-mano="papel"><b>2</b> ✋</button>
+                <button type="button" data-mano="tijera"><b>3</b> ✌️</button>
+                <button type="button" data-mano=""><b>0</b> NADA</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="pie" id="pie">PRIMERO EN GANAR 3</footer>
+
+    <!-- ===== Modo desarrollo: datos técnicos (oculto en modo jugador) ===== -->
+    <aside class="diagnostico" id="diag" aria-label="Diagnóstico">
+        <h3>MODO DESARROLLO</h3>
+        <dl>
+            <dt>Modelo</dt><dd id="dModelo">—</dd>
+            <dt>Umbrales</dt><dd id="dUmbral">—</dd>
+            <dt>Backend</dt><dd id="dBackend">—</dd>
+            <dt>Estado</dt><dd id="dEstado">—</dd>
+            <dt>Instantánea</dt><dd id="dInstante">—</dd>
+            <dt>Estable</dt><dd id="dEstable">—</dd>
+            <dt>Confianza</dt><dd id="dConf">—</dd>
+            <dt>Cajas</dt><dd id="dCajas">—</dd>
+            <dt>FPS / lat.</dt><dd id="dFps">—</dd>
+            <dt>Ventana</dt><dd id="dVentana">—</dd>
+            <dt>Audio</dt><dd id="dAudio">—</dd>
+        </dl>
+    </aside>
+
+    <!-- ===== Pantallas superpuestas (una por estado que espera al jugador) ===== -->
+    <section class="pantalla" id="pantallaMenu" aria-label="Menú de Michikembo">
+        <div class="tarjeta">
+            <h1>MICHI<span>KEMBO</span></h1>
+            <p class="lema">Piedra, papel o tijera contra Michi.<br />Muestra tu mano a la cámara.</p>
+            <div class="botones">
+                <button type="button" class="boton principal" id="btnJugar">▶ JUGAR</button>
+                <button type="button" class="boton" id="btnAjustes">AJUSTES</button>
+                <button type="button" class="boton" id="btnSalir">SALIR A LA CONSOLA</button>
+            </div>
+            <p class="ayuda">ENTER jugar · ESC volver · P pausa · M sonido · D desarrollo</p>
+        </div>
+    </section>
+
+    <section class="pantalla" id="pantallaListo" aria-label="¿Estás listo?">
+        <div class="tarjeta">
+            <h2 class="grande">¿ESTÁS LISTO?</h2>
+            <div class="botones fila">
+                <button type="button" class="boton principal" id="btnSi">SÍ</button>
+                <button type="button" class="boton" id="btnNo">NO</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="pantalla" id="pantallaMeta" aria-label="Elegir meta de victorias">
+        <div class="tarjeta">
+            <h2>PRIMERO EN GANAR…</h2>
+            <div class="metas" id="metas" role="group" aria-label="Victorias necesarias"></div>
+            <p class="ayuda">Los empates y las rondas sin gesto no suman.</p>
+            <div class="botones"><button type="button" class="boton" id="btnMetaVolver">◀ VOLVER</button></div>
+        </div>
+    </section>
+
+    <section class="pantalla" id="pantallaCamara" aria-label="Preparar la cámara">
+        <div class="tarjeta">
+            <h2>TU CÁMARA</h2>
+            <div class="explicacion" id="explicacionCamara">
+                <p>Michi necesita ver tu mano. Al pulsar <b>ACTIVAR CÁMARA</b> el navegador te pedirá permiso.</p>
+                <p class="ayuda">La imagen se analiza en tu computador. No se guarda ni se envía.</p>
+            </div>
+            <ul class="pasos-camara" id="pasosCamara">
+                <li id="pasoModelo">Detector: esperando…</li>
+                <li id="pasoCamara">Cámara: apagada</li>
+            </ul>
+            <div class="consejo" id="consejoCamara">Encuadra UNA mano a la altura del pecho. Cuando aparezca el <b>1</b>, mantén tu gesto quieto.</div>
+            <div class="botones">
+                <button type="button" class="boton principal" id="btnActivarCamara">ACTIVAR CÁMARA</button>
+                <button type="button" class="boton principal" id="btnEmpezar" disabled>¡EMPEZAR!</button>
+                <button type="button" class="boton" id="btnCamaraVolver">◀ MENÚ</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="pantalla" id="pantallaFin" aria-label="Fin de la partida">
+        <div class="tarjeta tarjeta-fin">
+            <h2 class="titulo-fin" id="tituloFin">YOU WIN</h2>
+            <img class="fin-michi" id="finMichi" alt="" />
+            <p class="final" id="marcadorFin">MICHI 1 – 3 JUGADOR</p>
+            <p class="ayuda" id="metaFin">Primero en ganar 3</p>
+            <ol class="historial" id="historialFin"></ol>
+            <div class="botones">
+                <button type="button" class="boton principal" id="btnRevancha">↻ VOLVER A JUGAR</button>
+                <button type="button" class="boton" id="btnCambiarMeta">CAMBIAR META</button>
+                <button type="button" class="boton" id="btnFinSalir">SALIR A LA CONSOLA</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="pantalla" id="pantallaPausa" aria-label="Pausa">
+        <div class="tarjeta">
+            <h2>PAUSA</h2>
+            <div class="botones">
+                <button type="button" class="boton principal" id="btnSeguir">▶ SEGUIR</button>
+                <button type="button" class="boton" id="btnPausaMenu">ABANDONAR PARTIDA</button>
+                <button type="button" class="boton" id="btnPausaSalir">SALIR A LA CONSOLA</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="pantalla" id="pantallaError" aria-label="Error">
+        <div class="tarjeta">
+            <h2>¡UPS!</h2>
+            <p class="mensaje-error" id="mensajeError"></p>
+            <div class="botones">
+                <button type="button" class="boton principal" id="btnReintentar">REINTENTAR</button>
+                <button type="button" class="boton" id="btnErrorSimulado">JUGAR SIN MODELO (SIMULADO)</button>
+                <button type="button" class="boton" id="btnErrorMenu">◀ MENÚ</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="pantalla" id="pantallaAjustes" aria-label="Ajustes">
+        <div class="tarjeta">
+            <h2>AJUSTES</h2>
+            <label class="opcion">
+                <span>Detector</span>
+                <select id="selDetector">
+                    <option value="onnx">Modelo real (ONNX)</option>
+                    <option value="simulado-manual">Simulado: eliges con 1/2/3</option>
+                    <option value="simulado-aleatorio">Simulado: aleatorio</option>
+                </select>
+            </label>
+            <label class="opcion check"><input type="checkbox" id="chkCamara" /> <span>Mostrar cámara en modo simulado</span></label>
+            <label class="opcion check"><input type="checkbox" id="chkEspejo" /> <span>Ver la cámara como espejo</span></label>
+            <label class="opcion check"><input type="checkbox" id="chkSilencio" /> <span>Silenciar todo (M)</span></label>
+            <label class="opcion volumen"><span>Volumen general</span><input type="range" id="volMaestro" min="0" max="100" step="5" /></label>
+            <label class="opcion volumen"><span>Música</span><input type="range" id="volMusica" min="0" max="100" step="5" /></label>
+            <label class="opcion volumen"><span>Efectos</span><input type="range" id="volEfectos" min="0" max="100" step="5" /></label>
+            <label class="opcion check"><input type="checkbox" id="chkDev" /> <span>Modo desarrollo (datos técnicos)</span></label>
+            <div class="botones"><button type="button" class="boton principal" id="btnCerrarAjustes">LISTO</button></div>
+        </div>
+    </section>
+
+    <section class="pantalla" id="pantallaAdios" aria-label="Salida">
+        <div class="tarjeta">
+            <h2>¡HASTA PRONTO!</h2>
+            <p>Michi se quedó dormido. Cámara y sonido apagados.</p>
+            <div class="botones"><button type="button" class="boton principal" id="btnVolverDeAdios">VOLVER</button></div>
+        </div>
+    </section>
+
+    <div class="cargando" id="cargando">CARGANDO…</div>
+</div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

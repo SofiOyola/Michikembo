@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consola Michikembo</title>
+  <!-- Fuente pixel local (Press Start 2P, OFL): funciona sin internet -->
+  <link rel="stylesheet" href="css/console.css" />
+</head>
+<body>
+  <main class="room">
+    <!-- ======================= CARCASA DE LA CONSOLA =======================
+         Diseño original inspirado en la imagen de referencia de Jesus:
+         carcasa blanca con contorno morado, pantalla violeta, cruceta,
+         botones A/B rosados, SELECT/START inclinados y rejilla de altavoz. -->
+    <section id="consoleBody" class="console" aria-label="Consola Michikembo" data-power="off">
+      <!-- Franja superior con el interruptor de encendido -->
+      <div class="top-band" aria-hidden="true"></div>
+      <button id="btnPower" class="power" type="button" aria-label="Encender o apagar la consola (tecla P)">
+        <span class="power-led" aria-hidden="true"></span><span class="power-label">POWER</span>
+      </button>
+
+      <!-- Marco y pantalla -->
+      <div class="bezel">
+        <div class="bezel-top" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <span class="bezel-led" id="batteryLed" aria-hidden="true"></span>
+        <div id="screen" class="screen" aria-live="polite">
+          <!-- Capa: apagada -->
+          <div class="layer layer-off" data-layer="off">
+            <p class="hint">PULSA <b>POWER</b><br />O CUALQUIER TECLA</p>
+          </div>
+          <!-- Capa: arranque -->
+          <div class="layer layer-boot" data-layer="boot" hidden>
+            <div class="boot-logo">MICHI<span>KEMBO</span></div>
+            <div class="boot-sub">=^.^=</div>
+          </div>
+          <!-- Capa: selección de juego -->
+          <div class="layer layer-select" data-layer="select" hidden>
+            <header class="sel-head">
+              <span id="selBadge" class="badge">LISTO</span>
+              <span class="sel-label">GAME SELECT</span>
+              <span id="selSound" class="sound" title="Sonido (SELECT o Shift)">♪ ON</span>
+            </header>
+            <div class="sel-preview">
+              <canvas id="previewCanvas" width="480" height="270" aria-label="Vista previa del juego seleccionado"></canvas>
+            </div>
+            <h2 id="selTitle" class="sel-title">—</h2>
+            <div class="sel-nav">
+              <button class="arrow" data-input="left" type="button" aria-label="Juego anterior">◀</button>
+              <span id="selIndex">1/3</span>
+              <button class="arrow" data-input="right" type="button" aria-label="Juego siguiente">▶</button>
+            </div>
+            <p id="selDesc" class="sel-desc">—</p>
+            <div id="selDots" class="dots" role="tablist" aria-label="Juegos"></div>
+            <button class="sel-play" data-input="a" type="button"><span class="mini-a">A</span> JUGAR</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bajo la pantalla: dos líneas y el nombre, como en la referencia -->
+      <div class="brand-row" aria-hidden="true"><i class="l1"></i><i class="l2"></i><i class="l3"></i></div>
+
+      <!-- Controles -->
+      <div class="pad-zone">
+        <div class="dpad" role="group" aria-label="Cruceta">
+          <button class="dpad-btn up"    data-input="up"    type="button" aria-label="Arriba (juego anterior)"></button>
+          <button class="dpad-btn left"  data-input="left"  type="button" aria-label="Juego anterior"></button>
+          <span class="dpad-center" aria-hidden="true"></span>
+          <button class="dpad-btn right" data-input="right" type="button" aria-label="Juego siguiente"></button>
+          <button class="dpad-btn down"  data-input="down"  type="button" aria-label="Abajo (juego siguiente)"></button>
+        </div>
+      </div>
+      <div class="action-zone">
+        <div class="ab">
+          <button class="round-btn btn-b" data-input="b" type="button" aria-label="Botón B, volver (Escape o X)">B</button>
+          <button class="round-btn btn-a" data-input="a" type="button" aria-label="Botón A, jugar (Enter o Z)">A</button>
+        </div>
+      </div>
+      <div class="pill-zone">
+        <button class="pill" data-input="select" type="button" aria-label="Select: activar o silenciar el sonido (Shift)"><span></span><small>SELECT</small></button>
+        <button class="pill" data-input="start" type="button" aria-label="Start: jugar (Enter)"><span></span><small>START</small></button>
+      </div>
+
+      <!-- Rejilla diagonal del altavoz -->
+      <div class="speaker" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </section>
+
+    <p class="keys-legend">
+      <kbd>←</kbd><kbd>→</kbd> elegir · <kbd>Enter</kbd>/<kbd>Z</kbd> jugar · <kbd>Esc</kbd>/<kbd>X</kbd> volver ·
+      <kbd>Shift</kbd> sonido · <kbd>P</kbd> encender
+    </p>
+  </main>
+
+  <!-- ======================= ESCENARIO EXPANDIDO ======================= -->
+  <!-- Al pulsar Jugar, este overlay crece desde la pantalla hasta ocupar toda la ventana -->
+  <div id="stage" class="stage" hidden>
+    <div id="stageHost" class="stage-host"></div>
+    <div class="stage-bar">
+      <button id="btnExit" class="stage-btn" type="button" aria-label="Volver a la consola (Escape)">◀ CONSOLA <small>ESC</small></button>
+      <button id="btnFullscreen" class="stage-btn" type="button" aria-label="Pantalla completa">⛶</button>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

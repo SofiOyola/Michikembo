@@ -1,0 +1,40 @@
+{
+  "modelName": "Michikembo E3c (YOLOv8n + aumentación)",
+  "version": "E3c-v2.1",
+  "file": "model.onnx",
+  "format": "yolov8-detect-onnx",
+  "inputSize": 640,
+  "classNames": [
+    "Paper",
+    "Rock",
+    "Scissors"
+  ],
+  "confidenceThreshold": 0.2,
+  "iouThreshold": 0.45,
+  "revision": 1,
+  "status": "experimental",
+  "sha256": "82ea7a5d358031f171caf010c0aa06badb4b55e750d700c4fa8d265f0ede4646",
+  "bytes": 12775209,
+  "sourcePt": {
+    "file": "best.pt",
+    "sha256": "bc08a2921c61a2560271a5a385eb440e53240f8188cad913ce9c21c257209660",
+    "experiment": "E3c_yolov8n_aumentacion_v21"
+  },
+  "checkpointValMetrics": {
+    "metrics/precision(B)": 0.73149,
+    "metrics/recall(B)": 0.54694,
+    "metrics/mAP50(B)": 0.6331,
+    "metrics/mAP50-95(B)": 0.36528,
+    "val/box_loss": 1.68948,
+    "val/cls_loss": 1.56094,
+    "val/dfl_loss": 1.82305,
+    "fitness": 0.36528
+  },
+  "equivalence": {
+    "images": 10,
+    "topClassAgreement": 10,
+    "note": "PyTorch vs ONNX (Ultralytics) sobre marcos 640x480"
+  },
+  "exportedAt": "2026-11-19T10:55:33+00:00",
+  "notes": "Umbrales iniciales configurables, no validados con webcam."
+}
